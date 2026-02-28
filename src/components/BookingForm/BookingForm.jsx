@@ -24,13 +24,34 @@ function handleCheckinDateChange(checkinDateElem, setCheckinDate) {
  * @param {string} durationString - Value of the "Duration of stay" input
  * @param {function} setShowAvailabilityError - Function that takes a boolean input and shows/hides the availability error message.
  */
+let debounceTimer;
+let currentRequestId = 0;
+
 export function onRequestedDatesChange(
   propertyId,
   checkinDate,
   durationString,
   setShowAvailabilityError
 ) {
-  // TODO: implement function
+  clearTimeout(debounceTimer);
+  const requestId = ++currentRequestId;
+
+  debounceTimer = setTimeout(() => {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(checkinDate)) {
+      return;
+    }
+
+    let duration = parseInt(durationString, 10);
+    if (isNaN(duration)) {
+      duration = 1;
+    }
+
+    ApiUtil.checkAvailability(propertyId, checkinDate, duration).then((isAvailable) => {
+      if (requestId === currentRequestId) {
+        setShowAvailabilityError(!isAvailable);
+      }
+    });
+  }, 500);
 }
 
 const BookingForm = ({ rate }) => {
@@ -44,7 +65,11 @@ const BookingForm = ({ rate }) => {
   const checkinDateRef = useRef(null);
 
   function submitBooking() {
-    //TODO: make a call to API to reserve the property.
+    setLoading(true);
+    ApiUtil.checkAvailability(propertyId, checkinDate, duration).then((response) => {
+      
+      setLoading(false);
+    });
   }
 
   useEffect(() => {
