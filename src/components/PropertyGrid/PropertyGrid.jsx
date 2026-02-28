@@ -21,7 +21,6 @@ const PropertyGrid = ({ filters }) => {
 
   const properties = allProperties ? filterProperties(allProperties, filters) : null;
 
-  console.log("@@PROPERTIES", properties)
 
   if (!properties || properties.length === 0) {
     return (
