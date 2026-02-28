@@ -11,12 +11,35 @@ export const PROPERTIES_PER_PAGE = 6;
  * @example getPaginationLabels(100, 50, 5) //returns [1, 49, 50, 51, 100]
  */
 export const getPaginationLabels = (totalPages, curPage, maxLabels) => {
-  //TODO: replace placeholder solution
-  const pageNums = [];
-  for (var i = 0; i < totalPages; i++) {
-    pageNums.push(i + 1);
+  if (totalPages <= 0) return [];
+  if (totalPages <= maxLabels) {
+    return Array.from({ length: totalPages }, (_, index) => index + 1);
   }
-  return pageNums;
+
+  const numberOfMiddlePages = maxLabels - 2;
+  let idealStart = curPage - Math.floor((numberOfMiddlePages - 1) / 2);
+  let idealEnd = curPage + Math.ceil((numberOfMiddlePages - 1) / 2);
+
+  if (idealStart <= 1) {
+    idealStart = 2;
+    idealEnd = idealStart + numberOfMiddlePages - 1;
+  }
+
+  if (idealEnd >= totalPages) {
+    idealEnd = totalPages - 1;
+    idealStart = idealEnd - numberOfMiddlePages + 1;
+    if (idealStart <= 1) {
+      idealStart = 2;
+    }
+  }
+
+  const labels = [1];
+  for (let i = idealStart; i <= idealEnd; i++) {
+    labels.push(i);
+  }
+  labels.push(totalPages);
+
+  return labels;
 };
 
 /**
