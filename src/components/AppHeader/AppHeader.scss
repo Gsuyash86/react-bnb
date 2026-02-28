@@ -1,0 +1,32 @@
+@use '../../styles/colors.scss' as *;
+@use '../../styles/mixins.scss' as *;
+@use '../../styles/general.scss';
+@use '../../styles/form.scss';
+
+$logo-size: 2rem;
+
+.app-header {
+  display: flex;
+  padding: 2rem;
+
+  .logo-wrapper {
+    display: flex;
+    align-items: center;
+    font-size: 2rem;
+    font-weight: 500;
+    line-height: 1;
+    color: $color-red;
+    text-decoration: none;
+
+    .logo {
+      height: $logo-size;
+      margin-right: 0.5rem;
+    }
+  }
+
+  .react-select-container {
+    @include react-select-styling();
+    flex: 1 1 auto;
+    margin-left: 2rem;
+  }
+}

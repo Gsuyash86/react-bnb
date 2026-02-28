@@ -1,0 +1,62 @@
+@use '../../styles/colors' as *;
+
+.booking-form {
+  box-sizing: border-box;
+  border: 1px solid $color-grey;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  box-shadow: rgba(0, 0, 0, .12) 0 0.25rem 1rem;
+  margin-bottom: 1.25rem;
+
+  .booking-rate-section {
+    margin-bottom: 0.625rem;
+  }
+
+  .booking-rate-amount {
+    font-weight: bold;
+    font-size: 1.25rem;
+  }
+
+  .booking-form-item {
+    margin-bottom: 0.625rem;
+
+    & > label {
+      display: block;
+    }
+  }
+
+  .booking-form-error-msg {
+    color: $color-red;
+    font-size: 0.875rem;
+  }
+
+  .booking-form-input {
+    width: calc(100% - 1.25rem);
+    padding: 0.625rem;
+    border-radius: 0.5rem;
+    border: 1px solid $color-grey;
+  }
+
+  .booking-form-submit {
+    margin-top: 0.625rem;
+    cursor: pointer;
+    width: 100%;
+    padding: 0.625rem;
+    border-radius: 0.5rem;
+    border: none;
+    color: white;
+    background-image: linear-gradient(71deg, #7200d3, #002dd3), linear-gradient(#000000, #000000);
+    font-size: 1rem;
+    font-weight: bold;
+    height: 40px;
+    position: relative;
+  }
+
+  .booking-form-loading-img {
+    height: 25px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}

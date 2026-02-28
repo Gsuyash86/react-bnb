@@ -1,0 +1,433 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "KBnB API",
+    "description": "API spec for KBnb",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/api"
+    }
+  ],
+  "paths": {
+    "/properties": {
+      "get": {
+        "summary": "Get a list of all properties",
+        "tags": [
+          "properties"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Property"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/properties/{propertyId}": {
+      "get": {
+        "summary": "Lookup a property by ID",
+        "tags": [
+          "properties"
+        ],
+        "parameters": [
+          {
+            "name": "propertyId",
+            "in": "path",
+            "required": true,
+            "description": "The id of the property to retrieve",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Property"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Property not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/properties/{propertyId}/reserve": {
+      "post": {
+        "summary": "Reserve a property",
+        "tags": [
+          "properties"
+        ],
+        "parameters": [
+          {
+            "name": "propertyId",
+            "in": "path",
+            "required": true,
+            "description": "The id of the property to reserve",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Booking details",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "checkinDate",
+                  "duration",
+                  "guests"
+                ],
+                "properties": {
+                  "checkinDate": {
+                    "type": "string",
+                    "description": "Date of arrival at the property",
+                    "pattern": "yyyy-mm-dd",
+                    "example": "2021-06-17"
+                  },
+                  "duration": {
+                    "type": "integer",
+                    "description": "Number of days to stay at the property. Must be greater than 0.",
+                    "example": 4
+                  },
+                  "guests": {
+                    "type": "integer",
+                    "description": "Number number of guests staying at the property. Must be greater than 0.",
+                    "example": 2
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Property already booked",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "errorCode": "PROPERTY_UNAVAILABLE",
+                  "errorMsg": "Property already booked on 2021/04/20"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "INVALID_CHECKIN_DATE": {
+                    "value": {
+                      "errorCode": "INVALID_PARAM",
+                      "errorMessage": "Invalid Request. Field 'checkinDate' of type 'string' is invalid."
+                    }
+                  },
+                  "INVALID_DURATION": {
+                    "value": {
+                      "errorCode": "INVALID_PARAM",
+                      "errorMessage": "Invalid Request. Field 'duration' of type 'number' is invalid."
+                    }
+                  },
+                  "INVALID_GUEST": {
+                    "value": {
+                      "errorCode": "INVALID_PARAM",
+                      "errorMessage": "Invalid Request. Field 'guests' of type 'number' is invalid."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/properties/{propertyId}/checkAvailability": {
+      "post": {
+        "summary": "Check if a property is available on a given check-in date",
+        "tags": [
+          "properties"
+        ],
+        "parameters": [
+          {
+            "name": "propertyId",
+            "in": "path",
+            "required": true,
+            "description": "The id of the property to check the availability of",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Check availability payload",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "checkinDate",
+                  "duration"
+                ],
+                "properties": {
+                  "checkinDate": {
+                    "type": "string",
+                    "description": "Date of arrival at the property",
+                    "pattern": "yyyy-mm-dd",
+                    "example": "2021-06-17"
+                  },
+                  "duration": {
+                    "type": "integer",
+                    "description": "Number of days to stay at the property. Must be greater than 0.",
+                    "example": 4
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "available": {
+                      "type": "boolean"
+                    }
+                  }
+                },
+                "example": {
+                  "available": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Property not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "errorCode": "PROPERTY_NOT_FOUND",
+                  "errorMsg": "Property not found with id: beyond-the-door"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "INVALID_CHECKIN_DATE": {
+                    "value": {
+                      "errorCode": "INVALID_PARAM",
+                      "errorMsg": "Invalid Request. Field 'checkinDate' of type 'string' is invalid."
+                    }
+                  },
+                  "INVALID_DURATION": {
+                    "value": {
+                      "errorCode": "INVALID_PARAM",
+                      "errorMsg": "Invalid Request. Field 'duration' of type 'number' is invalid."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/propertyLookupTree": {
+      "get": {
+        "summary": "Get a tree used to lookup properties by name",
+        "tags": [
+          "properties"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PropertyLookupTreeNode"
+                },
+                "example": {
+                  "b": {
+                    "match": {
+                      "id": "b",
+                      "name": "B"
+                    },
+                    "a": {
+                      "r": {
+                        "match": {
+                          "id": "bar",
+                          "name": "Bar"
+                        }
+                      },
+                      "z": {
+                        "match": {
+                          "id": "baz",
+                          "name": "Baz"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Property": {
+        "type": "object",
+        "required": [
+          "houseType",
+          "imageAltText",
+          "rate",
+          "id",
+          "superHost",
+          "city",
+          "name",
+          "country",
+          "placeType",
+          "imageSrc",
+          "stars",
+          "territory"
+        ],
+        "properties": {
+          "houseType": {
+            "type": "string"
+          },
+          "imageAltText": {
+            "type": "string"
+          },
+          "rate": {
+            "type": "integer"
+          },
+          "id": {
+            "type": "string"
+          },
+          "superHost": {
+            "type": "boolean"
+          },
+          "city": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          },
+          "placeType": {
+            "type": "string"
+          },
+          "imageSrc": {
+            "type": "string"
+          },
+          "stars": {
+            "type": "number"
+          },
+          "territory": {
+            "type": "string"
+          }
+        }
+      },
+      "PropertyLookupTreeNode": {
+        "type": "object",
+        "properties": {
+          "match": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "additionalProperties": {
+          "$ref": "#/components/schemas/PropertyLookupTreeNode"
+        }
+      },
+      "Error": {
+        "type": "object",
+        "required": [
+          "errorCode",
+          "errorMsg"
+        ],
+        "properties": {
+          "errorCode": {
+            "type": "string"
+          },
+          "errorMsg": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

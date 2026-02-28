@@ -1,0 +1,72 @@
+@use './colors.scss' as *;
+
+@mixin default-button() {
+    background: none;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+}
+
+@mixin clear-button() {
+    background: none;
+    cursor: pointer;
+    border: none;
+}
+
+@mixin react-select-styling() {
+    .react-select {
+        color: $color-black;
+
+        &__control {
+            box-shadow: none;
+            cursor: pointer;
+            border-width: 2px;
+            border-color: $color-black;
+
+            &--is-focused,
+            &:hover {
+                border-color: $color-black;
+            }
+        }
+
+        &__indicator {
+            color: $color-black;
+
+            &:hover,
+            &:focus {
+                color: $color-black;
+            }
+
+            &-separator {
+                background-color: $color-black;
+            }
+        }
+
+        &__menu {
+            box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        &__menu-list {
+            padding: 0;
+        }
+
+        &__option {
+            &:active,
+            &--is-selected {
+                background: $color-red;
+                color: $color-white;
+            }
+
+            &--is-focused {
+                background: $color-plum;
+                color: $color-white;
+            }
+        }
+
+        &__placeholder {
+            color: $color-grey;
+        }
+    }
+}

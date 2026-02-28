@@ -1,0 +1,57 @@
+@use '../../styles/colors.scss' as *;
+@use '../../styles/mixins.scss' as *;
+
+$page-link-padding: 0.5rem;
+
+.pagination {
+    width: 100%;
+    margin-top: 1rem;
+
+    .page-controls {
+        display: flex;
+        justify-content: center;
+    }
+
+    .page-link-wrapper {
+        display: flex;
+        justify-content: center;
+        height: 2.5rem;
+        width: 20rem;
+        max-width: 100%;
+    }
+
+    .dots {
+        font-size: 1rem;
+        padding: $page-link-padding;
+    }
+
+    .page-link, .arrow-button {
+        @include clear-button();
+    }
+
+    .arrow-button {
+        font-size: 1.5rem;
+
+        &:not(:disabled) {
+            color: $color-red;
+        }
+
+        &:disabled {
+            cursor: auto;
+        }
+    }
+
+    .page-link {
+        font-size: 1rem;
+        padding: $page-link-padding;
+
+        &:hover, &:focus {
+            text-decoration: underline;
+        }
+
+        &.current {
+            font-weight: bold;
+            color: $color-red;
+        }
+    }
+}

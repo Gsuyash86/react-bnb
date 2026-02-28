@@ -1,0 +1,106 @@
+@use "sass:math";
+
+@use '../../styles/breakpoints.scss' as *;
+@use '../../styles/colors.scss' as *;
+
+$gutter-size: 1.5rem;
+
+.property-grid {
+    padding: $gutter-size;
+    width: 100%;
+    box-sizing: border-box;
+
+    .no-results {
+        text-align: center;
+    }
+
+    .property-flex-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        list-style: none;
+        margin: 0 - $gutter-size;
+        padding: 0;
+
+        > li {
+            width: calc(33.33% - #{$gutter-size * 0.5});
+            margin-bottom: $gutter-size;
+            margin-left: math.div($gutter-size * 2, 3);
+
+            &:nth-child(3n + 1) {
+                margin-left: 0;
+            }
+
+            @media only screen and (max-width: $breakpoint-tablet) {
+                width: calc(50% - #{$gutter-size * 0.5});
+                margin-left: 0;
+            }
+
+            @media only screen and (max-width: $breakpoint-mobile) {
+                width: 100%;
+            }
+        }
+
+        @media only screen and (max-width: $breakpoint-tablet) {
+            justify-content: space-between;
+        }
+    }
+
+    .property-card {
+        border-radius: 0.5rem;
+        box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
+        color: $color-black;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+        text-decoration: none;
+
+        &:hover,
+        &:focus {
+            .property-card-title {
+                text-decoration: underline;
+            }
+        }
+
+        &-content {
+            padding: 1rem;
+            background: white;
+        }
+
+        &-image {
+            height: 10rem;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        &-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+        }
+
+        &-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        &-star-icon {
+            width: 1rem;
+            height: 1rem;
+            margin-right: 0.5rem;
+            color: $color-red;
+        }
+
+        &-star-container {
+            display: flex;
+        }
+    }
+
+    @media only screen and (max-width: $breakpoint-desktop-lg) {
+        margin-top: 0;
+    }
+}

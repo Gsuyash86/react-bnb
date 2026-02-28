@@ -1,0 +1,38 @@
+{
+  "env": {
+    "browser": true,
+    "es2020": true
+  },
+  "parserOptions": { "sourceType": "module" },
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:react/jsx-runtime"
+  ],
+  "rules": {
+    "no-unused-vars": "off",
+    "quotes": ["warn", "single"],
+    "semi": ["warn", "always"]
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "overrides": [
+    {
+      "files": ["server/**"],
+      "env": {
+        "node": true
+      }
+    },
+    {
+      "files": ["src/tests/**"],
+      "extends": ["plugin:vitest-globals/recommended"],
+      "env": {
+        "vitest-globals/env": true,
+        "node": true
+      }
+    }
+  ]
+}

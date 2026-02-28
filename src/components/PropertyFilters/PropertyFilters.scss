@@ -1,0 +1,87 @@
+@use '../../styles/breakpoints.scss' as *;
+@use '../../styles/colors.scss' as *;
+@use '../../styles/mixins.scss' as *;
+
+$icon-size: 1rem;
+
+.property-filters {
+    padding: 2rem 0 0 2rem;
+    position: sticky;
+    top: 0;
+
+    .filter-wrapper {
+        padding: 1rem;
+        border: 1px solid $color-grey;
+        border-radius: 0.5rem;
+        box-sizing: border-box;
+    }
+
+    .mobile-filter-button {
+        display: none;
+    }
+
+    .filter-clear-button {
+        @include default-button();
+        box-shadow: none;
+        border: 1px solid $color-black;
+        background: $color-black;
+        color: $color-white;
+        margin-top: 1rem;
+        transition: all 0.25s ease;
+
+        &:hover,
+        &:focus {
+            background: $color-red;
+            border-color: $color-red;
+        }
+    }
+
+    @media only screen and (max-width: $breakpoint-desktop-lg) {
+        padding: 1rem 2rem;
+        background: $color-white;
+
+        .filter-wrapper {
+            padding: 0;
+            width: 100%;
+            position: static;
+        }
+
+        .filter-content {
+            border-top: 1px solid $color-grey;
+            padding: 1rem;
+        }
+
+        .mobile-filter-button {
+            @include default-button();
+            border: none;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            width: 100%;
+
+            &:hover,
+            &:focus {
+                text-decoration: underline;
+            }
+
+            .filter-icon {
+                width: $icon-size;
+                height: $icon-size;
+            }
+        }
+
+        .mobile-hidden {
+            display: none;
+        }
+    }
+
+    @media only screen and (max-width: $breakpoint-tablet) {
+        &.mobile-open {
+            height: 100vh;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+    }
+}

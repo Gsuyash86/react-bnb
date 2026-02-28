@@ -1,0 +1,30 @@
+@use '../../styles/breakpoints.scss' as *;
+@use '../../styles/colors.scss' as *;
+
+.home-page {
+  display: flex;
+  align-items: stretch;
+
+  .home-filters {
+    width: 25%;
+    min-width: 25rem;
+  }
+
+  .home-content {
+    width: 100%;
+    padding: 2rem;
+    box-sizing: border-box;
+  }
+
+  @media only screen and (max-width: $breakpoint-desktop-lg) {
+    flex-direction: column;
+
+    .home-filters {
+      width: 100%;
+      min-width: auto;
+      position: sticky;
+      top: 0;
+      padding-top: 0;
+    }
+  }
+}

@@ -1,0 +1,19 @@
+@use '../../styles/breakpoints.scss' as *;
+
+.property-page {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: $breakpoint-desktop-lg;
+  padding: 0 3rem;
+
+  .property-info-section {
+    display: inline-block;
+    width: 66%;
+  }
+
+  .property-booking-section {
+    width: 33%;
+    vertical-align: top;
+    display: inline-block;
+  }
+}

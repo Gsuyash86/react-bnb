@@ -1,0 +1,30 @@
+@use '../../../styles/colors.scss' as *;
+
+@mixin toggle-color($color) {
+    .react-toggle-thumb {
+        border-color: $color;
+    }
+
+    .react-toggle-track {
+        background-color: $color;
+    }
+}
+
+.react-toggle {
+    @include toggle-color($color-black);
+
+    &.react-toggle--checked {
+        @include toggle-color($color-red);
+    }
+
+    &:hover,
+    &:focus {
+        &:not(.react-toggle--disabled) {
+            @include toggle-color($color-black);
+        }
+
+        &.react-toggle--checked {
+            @include toggle-color($color-plum);
+        }
+    }
+}

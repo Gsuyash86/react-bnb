@@ -1,0 +1,28 @@
+.property-info {
+  margin-bottom: 1.25rem;
+
+  .property-info-item-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .property-info-item {
+    margin-bottom: 1.5rem;
+    display: flex;
+  }
+
+  .property-info-item-icon {
+    flex: 0 0 1.75rem;
+    font-size: 1.5rem;
+  }
+
+  .property-info-item-content {
+    margin-left: 1rem;
+  }
+
+  .property-info-item-title {
+    font-weight: bold;
+  }
+}
+

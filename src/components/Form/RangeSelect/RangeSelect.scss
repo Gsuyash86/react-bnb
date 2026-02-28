@@ -1,0 +1,62 @@
+@use '../../../styles/colors.scss' as *;
+
+.rc-slider-wrapper {
+    padding: 0 0.5rem;
+    box-sizing: border-box;
+    width: 100%;
+
+    .rc-slider {
+        margin-bottom: 2rem;
+    }
+
+    .rc-slider-handle {
+        border-color: $color-black;
+        z-index: initial;
+    }
+
+    .rc-slider-track {
+        background-color: $color-black;
+    }
+
+    .rc-slider-handle.rc-slider-handle-dragging {
+        box-shadow: 0 0 0.25rem $color-red;
+        border-color: $color-red;
+    }
+
+    .rc-slider-mark-text {
+        &:not(.rc-slider-mark-text-active) {
+            z-index: -1;
+        }
+
+        &-active {
+            background: rgba(255, 255, 255, 0.9);
+            color: $color-black;
+        }
+    }
+
+    &.left-modified {
+        .rc-slider-track {
+            background-color: $color-plum;
+        }
+
+        .rc-slider-handle-1 {
+            border-color: $color-red;
+        }
+    }
+
+    &.right-modified {
+        .rc-slider-track {
+            background-color: $color-plum;
+        }
+
+        .rc-slider-handle-2 {
+            border-color: $color-red;
+        }
+    }
+
+    &.both-modified {
+        .rc-slider-track {
+            background-color: $color-red;
+        }
+    }
+}
