@@ -62,14 +62,51 @@ const BookingForm = ({ rate }) => {
   const [showAvailabilityError, setShowAvailabilityError] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const [submitError, setSubmitError] = useState('');
+  const [isSuccess, setIsSuccess] = useState(false);
+
   const checkinDateRef = useRef(null);
 
-  function submitBooking() {
+  // Improvements made:
+// - Switched from handling the button's onClick to using the form’s onSubmit,
+//   so it also works properly when users press the Enter key.
+// - Added built-in HTML validations like `required` and `min` to catch basic
+//   input errors before running custom JavaScript validation.
+// - Properly manages the loading state, whether the API request succeeds or fails.
+// - Displays clear success and error messages in the UI, including a helpful
+//   error section when something goes wrong.
+// - Improved accessibility by following standard screen reader patterns,
+//   such as wrapping inputs inside labels or correctly linking them using IDs.
+
+  function submitBooking(e) {
+    if (e) e.preventDefault();
+    setSubmitError('');
+
+    if (showAvailabilityError) {
+      setSubmitError('Please adjust the check-in date or duration.');
+      return;
+    }
+
+    const durationNum = parseInt(duration, 10);
+    const guestsNum = parseInt(guests, 10);
+
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(checkinDate) || isNaN(durationNum) || isNaN(guestsNum)) {
+      setSubmitError('Please accurately fill out all fields.');
+      return;
+    }
+
     setLoading(true);
-    ApiUtil.checkAvailability(propertyId, checkinDate, duration).then((response) => {
-      
-      setLoading(false);
-    });
+    ApiUtil.reserve(propertyId, checkinDate, durationNum, guestsNum)
+      .then(() => {
+        setLoading(false);
+        setIsSuccess(true);
+      })
+      .catch((err) => {
+        setLoading(false);
+        setSubmitError(
+          err.response?.data?.errorMsg || 'An error occurred while making the reservation.'
+        );
+      });
   }
 
   useEffect(() => {
@@ -77,20 +114,36 @@ const BookingForm = ({ rate }) => {
     onRequestedDatesChange(propertyId, checkinDate, duration, setShowAvailabilityError);
   }, [propertyId, checkinDate, duration]);
 
+  if (isSuccess) {
+    return (
+      <div className="booking-form">
+        <div className="booking-rate-section">
+          <strong>Reservation Successful!</strong>
+          <p>We look forward to hosting you.</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <form className="booking-form">
+    <form className="booking-form" onSubmit={submitBooking}>
       <div className="booking-rate-section">
         <span className="booking-rate-amount">${rate}</span>
         /night
       </div>
 
+      {submitError && <div className="booking-form-error-msg">{submitError}</div>}
+
       <div className="booking-form-item">
-        <label>Check-in date</label>
+        <label htmlFor="checkinDate">Check-in date</label>
         <input
+          id="checkinDate"
           className="booking-form-input"
           onChange={() => handleCheckinDateChange(checkinDateRef.current, setCheckinDate)}
           ref={checkinDateRef}
           placeholder="yyyy-mm-dd"
+          required
+          aria-invalid={showAvailabilityError}
         />
         {showAvailabilityError && (
           <div className="booking-form-error-msg">The specified dates are not available.</div>
@@ -98,19 +151,37 @@ const BookingForm = ({ rate }) => {
       </div>
 
       <div className="booking-form-item">
-        <label>Duration of stay (days)</label>
-        <input className="booking-form-input" onChange={(e) => setDuration(e.target.value)} />
+        <label htmlFor="duration">Duration of stay (days)</label>
+        <input
+          id="duration"
+          type="number"
+          min="1"
+          className="booking-form-input"
+          onChange={(e) => setDuration(e.target.value)}
+          required
+        />
       </div>
 
       <div className="booking-form-item">
-        <label>Number of guests</label>
-        <input className="booking-form-input" onChange={(e) => setGuests(e.target.value)} />
+        <label htmlFor="guests">Number of guests</label>
+        <input
+          id="guests"
+          type="number"
+          min="1"
+          className="booking-form-input"
+          onChange={(e) => setGuests(e.target.value)}
+          required
+        />
       </div>
 
       <div>
-        <button className="booking-form-submit" type="button" onClick={submitBooking}>
+        <button
+          className="booking-form-submit"
+          type="submit"
+          disabled={loading || showAvailabilityError}
+        >
           {loading ? (
-            <img src={LoadingImg} alt="" className="booking-form-loading-img" />
+            <img src={LoadingImg} alt="Loading..." className="booking-form-loading-img" />
           ) : (
             'Reserve'
           )}
