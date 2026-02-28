@@ -17,3 +17,17 @@
     display: inline-block;
   }
 }
+
+@media (max-width: ($breakpoint-tablet - 1)) {
+  .property-page {
+    .property-booking-section {
+      width: 100%;
+      display: block;
+    }
+
+    .property-info-section {
+      width: 100%;
+      display: block;
+    }
+  }
+}
